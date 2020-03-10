@@ -1,10 +1,6 @@
 package hw1;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.IOException;
-
 import java.util.Scanner;
 import java.io.FileReader;
 import java.io.BufferedReader;
@@ -13,31 +9,23 @@ import java.io.BufferedReader;
 public class TheaterReservation
 {
 
-    public static void main(String[] args) throws IOException
+    public static void main(String[] args) 
     {
         boolean running = true;
 
-        Scanner sc = new Scanner(System.in);
-        File myObj;
-        //FileWriter myWriter = null;
-        FileWriter myWriter = null;
-        BufferedWriter bw = null;
+        Scanner sc = new Scanner(System.in);    
+        UserManagement UM = new UserManagement();
         
-        FileReader fr = null;
-        BufferedReader br = null;
+        Section s = new Section();
         
         int state = 1;
 
-        myObj = new File("reservation.txt");
-        if (myObj.exists())
-        {
-            System.out.println("file exists");
-        }
-        myWriter = new FileWriter(myObj, true);
-        bw = new BufferedWriter(myWriter);
-        
-        fr = new FileReader(myObj);
-        br = new BufferedReader(fr);
+//        myObj = new File("reservation.txt");
+//        if (myObj.exists())
+//        {
+//            System.out.println("file exists");
+//        }
+//     
         
         while (running) 
         {    
@@ -45,77 +33,42 @@ public class TheaterReservation
             {
                 System.out.println("Sign [U]p   Sign [I]n   E[X]it");
                 String letter = sc.nextLine();
+                String username;
+                String password;
+                
                 if(letter.equalsIgnoreCase("u"))
                 {
-                    System.out.println("Enter User id");
-                    // if username exists in file, say error
-                    String id = sc.nextLine();
-        
-                    //myWriter.write(id);
-        
-                    System.out.println("Enter password");
-                    String password = sc.nextLine();
-        
-                    //myWriter.write(password);
-                    
-                    bw.write("User ID: " + id + " , Password: " + password);
-                    bw.newLine();
-    
-                    System.out.println("Account Saved");
+                   System.out.println("Enter username");
+                   username = sc.nextLine();
+                   System.out.println("Enter password");
+                   password = sc.nextLine();
+                   UM.addUser(username, password);
+
                 } 
                 else if(letter.equalsIgnoreCase("i"))
                 {
-                    //System.out.println("null");
-                    // Use buffered reader line by line to parse
-                    System.out.println("Input user id");
-                    String id = sc.nextLine();
-                    boolean searching = true;
-                    String line = "";
-                    
-                    Scanner idsearch = new Scanner(myObj);
-                    while(searching)
+                    System.out.println("Enter username");
+                    username = sc.nextLine();
+                    if (UM.searchUser(username) == true) 
                     {
-                        line = idsearch.nextLine();
-                        //System.out.println(line);
- 
-                        String[] words = line.split("\\s+");
-                        for (String w : words)
+                        System.out.println("Enter password");
+                        password = sc.nextLine();
+                        if(UM.login(username, password) == true);
                         {
-                            if (w.equals(id))
-                            {
-                                System.out.println("ID found");
-                                System.out.println("Input password");
-                                String searchPass = sc.nextLine();
-                                for (String w2 : words)
-                                {
-                                    if (w2.equals(searchPass))
-                                    {
-                                        System.out.println("User confirmed");
-                                        state = 2;
-                                        searching = false;
-                                        break;
-                                    }   
-                                    
-                                }
-                                System.out.println("Wrong password");
-                                
-                            }
-                        }                    
-                        if (!idsearch.hasNextLine())
-                          {
-                              System.out.println("No user found");
-                              searching = false;
-                              break;
-                          }
-                        // String[] stringValidTokens = line.split(":");
+                            System.out.println("Successfully logged in");
+                            state = 2;
+                        }
                     }
-                    idsearch.close();
+                    else
+                    {
+                        System.out.println("User not found");
+                    }
+                        
+                   
                 } 
                 else if(letter.equalsIgnoreCase("x"))
                 {
-                    System.out.println("Program closing");
-                    running = false;   
-                    break;
+                    
                 }
                 else
                 {
@@ -132,10 +85,11 @@ public class TheaterReservation
             
             if (letter.equalsIgnoreCase("r"))
             {
-                System.out.println("Enter date of show");  
+                System.out.println("Enter date of show (MM/DD/YYYY)");  
                 String date = sc.nextLine();
-                System.out.println("Enter time of show");
+                System.out.println("Enter time of show (H:MM)");
                 String time = sc.nextLine();
+                s.getShow();
             }
             else if (letter.equalsIgnoreCase("v"))
             {
@@ -158,10 +112,6 @@ public class TheaterReservation
     }
    
         sc.close(); // Scanner Close
-        bw.close(); // BufferedWriter Close
-        myWriter.close(); // FileWriter Close
-        br.close(); // BufferedReader Close
-        fr.close(); // FileReader Close
         System.out.println("Reservation closed");
 
     }
