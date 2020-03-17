@@ -6,10 +6,11 @@ import javax.swing.*;
 
 public class ActionTester
 {
+    static int Hnum = 0;
+    static int Gnum = 0;
+    
     public static void main(String[] args)
     {
-        int Hnum = 1;
-        int Gnum = 1;
         
         JFrame frame = new JFrame();
 
@@ -20,24 +21,29 @@ public class ActionTester
         JButton helloButton = new JButton("Say Hello");
         helloButton.setEnabled(true);
 
-        JButton goodbyeButton = new JButton("Say Goodbye");    
+        JButton goodbyeButton = new JButton("Say Goodbye");  
+        goodbyeButton.setEnabled(false);
+        
         goodbyeButton.addActionListener(new ActionListener() 
         { 
             public void actionPerformed(ActionEvent event) 
             {                
-                textField.setText("Goodbye");           
+                Gnum++;
+                textField.setText("Goodbye " + Gnum);   
+                helloButton.setEnabled(true);
+                goodbyeButton.setEnabled(false);
+
             } 
             
         }
                 );
         
-        goodbyeButton.setEnabled(false);
-
         helloButton.addActionListener(new ActionListener() 
         { 
             public void actionPerformed(ActionEvent event) 
             { 
-                textField.setText("Hello, World!"); 
+                Hnum++;
+                textField.setText("Hello " + Hnum); 
                 helloButton.setEnabled(false);
                 goodbyeButton.setEnabled(true);
             } 
