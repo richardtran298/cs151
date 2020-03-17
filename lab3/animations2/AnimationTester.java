@@ -2,6 +2,8 @@ package lab3;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 /**
@@ -14,47 +16,66 @@ public class AnimationTester
    {
       JFrame frame = new JFrame();
 
+      ArrayList<MoveableShape> shapes = new ArrayList<>();   
       MoveableShape shape = new CarShape(0, 0, CAR_WIDTH);
       MoveableShape shape2 = new CarShape(0, 0, CAR_WIDTH);
       
-      MoveableShape ball = new BouncingBall(0,0, 20);
-
+      MoveableShape ball = new BouncingBall(0,0, 10);
       
-      ShapeIcon icon = new ShapeIcon(shape, ICON_WIDTH, ICON_HEIGHT);
-      ShapeIcon icon2 = new ShapeIcon(shape2, ICON_WIDTH, ICON_HEIGHT);
+      shapes.add(shape);
+      shapes.add(shape2);
       
-      ShapeIcon icon3 = new ShapeIcon(ball, ICON_WIDTH, ICON_HEIGHT);
-
-
+      for (MoveableShape carShape: shapes)
+      {
+          ShapeIcon icon = new ShapeIcon(shape, ICON_WIDTH, ICON_HEIGHT);
+          JLabel label = new JLabel(icon);
+          frame.setLayout(new FlowLayout());
+          frame.add(label);
+          
+          frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+          frame.pack();
+          frame.setVisible(true);
+          
+          
+          final int DELAY = 100;
+          // Milliseconds between timer ticks
+          Timer t = new Timer(DELAY, event ->
+             {
+                shape.move();
+                label.repaint();
+                shape2.move();             
+                
+             
+             });
+          t.start();
+      }
+      
+      ShapeIcon icon = new ShapeIcon(ball, ICON_WIDTH, ICON_HEIGHT);
       JLabel label = new JLabel(icon);
-      JLabel label2 = new JLabel(icon2);
-      
-      JLabel label3 = new JLabel(icon3);
-      
       frame.setLayout(new FlowLayout());
       frame.add(label);
-      frame.add(label2);
-      frame.add(label3);
-
       
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.pack();
       frame.setVisible(true);
-
+      
+      
       final int DELAY = 100;
       // Milliseconds between timer ticks
       Timer t = new Timer(DELAY, event ->
          {
-            shape.move();
-            label.repaint();
-            shape2.move();
-            label2.repaint();
             ball.move();
-            label3.repaint();
+            label.repaint();
             
          
          });
       t.start();
+      
+      //MoveableShape ball = new BouncingBall(0,0, 20);
+
+          
+
+    
    }
 
    private static final int ICON_WIDTH = 400;
